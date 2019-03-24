@@ -6,7 +6,7 @@ long long int DynamicArray[101][10];
 
 int main(void) {
 
-	// ±æÀÌ°¡ 1ÀÌ°í ³¡ÀÚ¸®°¡ iÀÎ ¼ıÀÚÀÇ °³¼ö
+	// ê¸¸ì´ê°€ 1ì´ê³  ëìë¦¬ê°€ iì¸ ìˆ«ìì˜ ê°œìˆ˜
 	for (int i = 1; i <= 9; i++) {
 		DynamicArray[1][i] = 1;
 	}
@@ -16,7 +16,7 @@ int main(void) {
 
 	for (int i = 2; i <= N; i++) {
 
-		// endNumÀÌ 0ÀÌ³ª 9ÀÎ °æ¿ì´Â ÇÑ ¹æÇâÀ¸·Î ¹Û¿¡ Ãß°¡°¡ ¾È‰Î
+		// endNumì´ 0ì´ë‚˜ 9ì¸ ê²½ìš°ëŠ” í•œ ë°©í–¥ìœ¼ë¡œ ë°–ì— ì¶”ê°€ê°€ ì•ˆÂ‰
 
 		DynamicArray[i][0] = DynamicArray[i - 1][1];
 		DynamicArray[i][9] = DynamicArray[i - 1][8];
