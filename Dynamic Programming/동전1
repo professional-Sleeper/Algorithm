@@ -1,0 +1,41 @@
+#include <stdio.h>
+using namespace std;
+
+int DParray[11000];
+int coin[110];
+
+int main(void) {
+
+	int N, K;
+	scanf("%d %d", &N, &K);
+
+	for (int i = 1; i <= N; i++) {
+		scanf("%d", &coin[i]);
+	}
+
+	for (int i = coin[1]; i <= K; i += coin[1]) {
+		DParray[i] = 1;
+	}
+	DParray[0] = 1;
+
+	// 동전을 i번째 까지 사용했을 때
+	// k원을 만들 수 있는 경우의 수를 저장.
+	for (int i = 2; i <= N; i++) {
+
+		for (int k = K; k >= coin[i]; k--) {
+
+			// 기존의 만들어진 경우의 수 ( 나를 한번도 안쓴 경우 )
+			//                +
+			// 나를 몇번 넣을 수 있는가??
+
+			for (int num = k/coin[i]; num >=1; num--) {
+				DParray[k] += DParray[k - (coin[i] * num)];
+			}
+		}
+
+	}
+
+	printf("%d\n", DParray[K]);
+
+	return 0;
+}
