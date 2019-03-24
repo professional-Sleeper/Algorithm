@@ -1,0 +1,39 @@
+#include <stdio.h>
+using namespace std;
+
+int wine[10100];
+int DP[10100][3];
+
+int big(int a, int b) {
+	if (a > b) return a;
+	return b;
+}
+
+int main(void) {
+
+	int N;
+	scanf("%d", &N);
+
+	for (int i = 1; i <= N; i++) {
+		scanf("%d", &wine[i]);
+	}
+
+	for (int idx = 1; idx <= N; idx++) {
+
+		int previousIndex = idx - 1;
+
+		DP[idx][0] = big(DP[previousIndex][1], DP[previousIndex][2]);
+		DP[idx][0] = big(DP[idx][0], DP[previousIndex][0]);
+
+		DP[idx][1] = DP[previousIndex][0] + wine[idx];
+		DP[idx][2] = DP[previousIndex][1] + wine[idx];
+
+	}
+
+	int ans = big(DP[N][1], DP[N][2]);
+	ans = big(ans, DP[N][0]);
+
+	printf("%d\n", ans);
+
+	return 0;
+}
