@@ -1,0 +1,121 @@
+#if 1
+#include <stdio.h>
+#include <vector>
+#define MAX 17
+
+using namespace std;
+
+int NodeNum, QuestionNum;
+vector <int> tree[50100];
+pair <int, int> questionList[10100];
+int depth[50100];
+int D[50100][21];
+bool visit[50100];
+
+void Input(void) {
+	scanf("%d", &NodeNum);
+
+	int parent, children;
+	for (int i = 1; i < NodeNum; i++) {
+		scanf("%d %d", &parent, &children);
+		tree[parent].push_back(children);
+		tree[children].push_back(parent);
+	}
+
+	scanf("%d", &QuestionNum);
+
+	int original, comparsion;
+	for (int i = 1; i <= QuestionNum; i++) {
+		scanf("%d %d", &original, &comparsion);
+
+		questionList[i] = make_pair(original, comparsion);
+
+	}
+	
+}
+
+void MakeDP(int node) {
+
+	for (int i = 1; i <= MAX; i++) {
+
+		int parent = D[node][i - 1];
+		D[node][i] = D[parent][i - 1];
+	}
+}
+
+void MakeOrderNum(int node,int order) {
+
+	depth[node] = order;
+
+	for (int i = 0; i < tree[node].size(); i++) {
+		int nextNode = tree[node][i];
+		if (!visit[nextNode]) {
+			D[nextNode][0] = node;
+			visit[nextNode] = true;
+			MakeDP(nextNode);
+			MakeOrderNum(nextNode, order + 1);
+		}
+	}
+
+}
+
+void MakeAnswer(int original, int compare) {
+
+	if (original != compare) {
+
+		for (int i = MAX; i >= 0; i--) {
+
+			int compareParent = D[compare][i];
+
+			if (compareParent == 0) continue;
+			if (depth[original] <= depth[compareParent]) {
+				compare = compareParent;
+			}
+		}
+
+		if (original != compare) {
+
+			for (int i = MAX; i >= 0; i--) {
+
+				int originalParent = D[original][i];
+				int compareParent = D[compare][i];
+
+				if (originalParent == 0) continue;
+				if (originalParent != compareParent) {
+					original = originalParent;
+					compare = compareParent;
+				}
+			}
+			original = D[original][0];
+		}
+		
+		
+	}
+
+	printf("%d\n", original);
+}
+
+int main(void) {
+
+	Input();
+	visit[1] = true;
+	MakeOrderNum(1,0);
+
+	for (int i = 1; i <= QuestionNum; i++) {
+		int original, compare;
+		original = questionList[i].first;
+		compare = questionList[i].second;
+
+		if (depth[original] > depth[compare]) {
+			int temp = original;
+			original = compare;
+			compare = temp;
+		}
+
+		MakeAnswer(original, compare);
+	}
+
+	return 0;
+}
+
+#endif
